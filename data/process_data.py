@@ -1,16 +1,46 @@
 import sys
+import pandas as pd
 
 
 def load_data(messages_filepath, categories_filepath):
-    pass
+    '''Load messages and categories data and merge'''
+    
+    messages = pd.read_csv(messages_filepath)
+    categories = pd.read_csv(categories_filepath)
+    df = messages.merge(categories, on='id')
 
 
 def clean_data(df):
-    pass
+    '''Clean the merged data and return dataframe'''
+    
+    #Create dataframe with the 'categories' column to split and clean
+    cat_split = df.categories.str.split(';', expand=True)
+    cat_split.columns = cat_split.iloc[0].str[:-2].tolist()
+    
+    #Remove everything before the '-' in the category columns, leaving the category name
+    for col in cat_split.columns:
+        cat_split[col] = cat_split[col].apply(lambda x: x[-1:])
+        cat_split[col] = cat_split[col].astype(int)
+    
+    #Change values '2' to '1' in the 'related' column
+    cat_split.loc[cat_split['related'] == 2] = 1
+    
+    #Merge with original dataframe and drop original cateogries column
+    df = pd.concat([df, cat_split], axis=1)
+    df.drop('categories', axis=1, inplace=True)
+    
+    #Drop duplicated data
+    df = df.drop_duplicates()
+    
+    return df
 
 
 def save_data(df, database_filename):
-    pass  
+    '''Save the cleaned data to an sqlite database'''
+    
+    conn = f"sqlite:///{database_filepath}"
+    engine = create_engine(conn)
+    df.to_sql('disaster_response', engine, index=False, if_exists='replace')  
 
 
 def main():
