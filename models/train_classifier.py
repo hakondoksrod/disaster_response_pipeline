@@ -4,6 +4,8 @@ import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
 import pickle
 import re
+import nltk
+nltk.download(['punkt', 'wordnet'])
 
 import pandas as pd
 from nltk.tokenize import word_tokenize
@@ -24,14 +26,14 @@ def load_data(database_filepath):
     X = df['message'].values
     y = df.iloc[:,4:]
     features = y.columns.tolist()
-    
+
     return X, y, features
 
 
 def tokenize(text):
     '''
     Function to tokenize and lemmatize text input.
-    
+
     Input:
         text: data for tokenization and lemmatization
     Output:
@@ -39,16 +41,16 @@ def tokenize(text):
     '''
     #Remove all punctuation from the text
     text = re.sub(r"[^a-zA-Z0-9]", ' ', text)
-    
+
     #Tokenize and lemmatize the text
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
-    
+
     clean_tokens = []
     for tok in tokens:
         clean_tok = lemmatizer.lemmatize(tok).lower().strip()
         clean_tokens.append(clean_tok)
-        
+
     return clean_tokens
 
 
@@ -59,7 +61,7 @@ def build_model():
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(PassiveAggressiveClassifier()))
     ])
-    
+
     parameters = {
         'vect__ngram_range': ((1, 1), (1, 2)),
         'vect__max_df': (0.5, 1.0),
@@ -69,9 +71,9 @@ def build_model():
         'clf__estimator__tol': (0.001, 0.002),
         'clf__estimator__max_iter': (1000, 1500),
     }
-    
+
     cv = GridSearchCV(pipeline, param_grid = parameters, n_jobs=-1, verbose=2)
-    
+
     return cv
 
 
@@ -92,13 +94,13 @@ def main():
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, y, features = load_data(database_filepath)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-        
+
         print('Building model...')
         model = build_model()
-        
+
         print('Training model...')
         model.fit(X_train, y_train)
-        
+
         print('Evaluating model...')
         evaluate_model(model, X_test, y_test, features)
 
