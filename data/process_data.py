@@ -1,6 +1,6 @@
 import sys
 import pandas as pd
-
+from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
     '''Load messages and categories data and merge'''
@@ -8,6 +8,8 @@ def load_data(messages_filepath, categories_filepath):
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, on='id')
+
+    return df
 
 
 def clean_data(df):
@@ -38,7 +40,7 @@ def clean_data(df):
 def save_data(df, database_filename):
     '''Save the cleaned data to an sqlite database'''
     
-    conn = f"sqlite:///{database_filepath}"
+    conn = f"sqlite:///{database_filename}"
     engine = create_engine(conn)
     df.to_sql('disaster_response', engine, index=False, if_exists='replace')  
 
