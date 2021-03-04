@@ -55,3 +55,10 @@ The imbalanced nature of the dataset became the deciding factor for choice of al
 Ultimately, both Linear SVC and PassiveAggressive Classifier yielded more or less the same F1 score, but PassiveAggressive performed a bit better on recall. The final scores after running a GridSearch to tune hyperparameters were a precision of 0.72, recall of 0.61 and an F1 score of 0.64. These are the weighted average scores of each category.
 
 ## Screenshots
+Main page
+
+![screenshot](screenshots/landing_page.jpg)
+
+Results page
+
+![screenshot](screenshots/results_page.jpg)
