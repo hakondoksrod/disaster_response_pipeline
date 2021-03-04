@@ -41,7 +41,7 @@ def index():
     # extract data needed for visuals
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
-    genre_names = list(genre_counts.index)
+    genre_names = list(genre_counts.index.str.title())
     genre_related = df[df['related'] == 1].groupby('genre').count()['message']
 
     # create visuals
@@ -80,7 +80,7 @@ def index():
             'data': [
                 Bar(
                     x=df.iloc[:,4:].sum().sort_values(ascending=True).values.tolist(),
-                    y=df.iloc[:,4:].sum().sort_values(ascending=True).index.tolist(),
+                    y=df.iloc[:,4:].sum().sort_values(ascending=True).index.str.replace('_', ' ').str.title().tolist(),
                     orientation='h'
                 )
             ],
