@@ -72,7 +72,7 @@ def build_model():
         'clf__estimator__max_iter': (1000, 1500),
     }
 
-    cv = GridSearchCV(pipeline, param_grid = parameters, n_jobs=-1, verbose=2)
+    cv = GridSearchCV(pipeline, param_grid = parameters, n_jobs=-1, verbose=2, cv=3)
 
     return cv
 
