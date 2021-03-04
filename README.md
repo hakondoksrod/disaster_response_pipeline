@@ -3,6 +3,11 @@ This web app uses a text classification machine learning model to categorize mes
 
 ## Table of Contents:
 - [Installation](#installation)
+    - [Prerequisites](#prerequisties)
+    - [Instructions](#instructions)
+- [File descriptions](#file-descriptions)
+- [Project Summary](#project-summary)
+- [Screenshots](#screenshots)
 
 ## Installation:
 Follow these intructions to run a copy of this web app on your local machine.
