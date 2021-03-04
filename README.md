@@ -2,6 +2,7 @@
 This web app uses a text classification machine learning model to categorize messages received during a humanitarian or environmental crisis. The model is trained on a data set containing abuot 30,000 real messages from various natural disasters. These messages have been encoded with 36 different categories depending on the content of the message. The data can be found [here](https://appen.com/datasets/combined-disaster-response-data/)
 
 ## Table of Contents:
+- [Installation](#installation)
 
 ## Installation:
 Follow these intructions to run a copy of this web app on your local machine.
