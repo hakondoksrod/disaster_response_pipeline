@@ -42,6 +42,7 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+    genre_related = df[df['related'] == 1].groupby('genre').count()['message']
 
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -50,17 +51,55 @@ def index():
             'data': [
                 Bar(
                     x=genre_names,
-                    y=genre_counts
+                    y=genre_counts,
+                    name='Total Messages'
+                ),
+                Bar(
+                    x=genre_names,
+                    y=genre_related,
+                    name='Related Messages'
                 )
             ],
 
             'layout': {
-                'title': 'Distribution of Message Genres',
+                'title': {
+                    'text': '<b>Distribution of Message Genres</b><br>'
+                    'Total messages and related (relevant) messages',
+                    'font': {'size': 16}
+                },
                 'yaxis': {
                     'title': "Count"
                 },
                 'xaxis': {
                     'title': "Genre"
+                },
+                'barmode': "group"
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=df.iloc[:,4:].sum().sort_values(ascending=True).values.tolist(),
+                    y=df.iloc[:,4:].sum().sort_values(ascending=True).index.tolist(),
+                    orientation='h'
+                )
+            ],
+
+            'layout': {
+                'title': {
+                    'text': '<b>Distribution of Message Categories</b>',
+                    'font': {'size': 16}
+                },
+                'yaxis': {
+                    'dtick': 1
+                },
+                'xaxis': {
+                    'title': 'Count'
+                },
+                'height': 600,
+                'margin': {
+                    'r': 40,
+                    'l': 150,
                 }
             }
         }
